@@ -4,7 +4,7 @@ https://scratch.mit.edu/projects/1219146913/
 
 Documentation for ShadowCodeCompiler has not come yet.
 
-#Compiling Scripts
+# Compiling Scripts
 In order to compile a program, run "(path)/Shadow Code Compiler/ShadowCodeCompiler/scc <filename>".
 
 Compilation results are available in "(path)/Shadow Code Compiler/out/<filename>.sasm" and are also displayed in the terminal.
