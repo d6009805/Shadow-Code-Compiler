@@ -1,0 +1,1 @@
+.start|push 5|$x|push|$y|push $x|push 5|strcmp|ramwrite *y|push 1|push y|strcmp|cg func1|exit|.func1|push $x is greater than 5|out|push 0|$return_value|ret|
