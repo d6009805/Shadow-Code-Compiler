@@ -11,13 +11,17 @@ def main():
 		except FileNotFoundError:
 			print(f"File '{sys.argv[1]}' not found")
 			quit(1234)
-		if len(sys.argv) > 2:
-			instance.compile_code(sys.argv[1], sys.argv[2])
-		else:
-			instance.compile_code(sys.argv[1])
+		kwargs = {}
+		for arg in sys.argv[2:]:
+			if "=" in arg:
+				key, value = arg.split("=", 1)
+				kwargs[key] = value
+			else:
+				print(f"Unknown argument '{arg}'")
+		instance.compile_code(sys.argv[1], **kwargs)
 	else:
-		print("compiler use for python file: python compiler.py <file> <separator>")
-		print(r"compiler use for batch file: (path)\compiler <file> <separator>")
+		print("compiler use for python file: python compiler.py <file>")
+		print(r"compiler use for batch file: (path)\compiler <file>")
 		print("use '/n' for newline separator")
 
 
@@ -212,6 +216,11 @@ class Compiler:
 			self.sasm(f"push {args[1]}")
 			self.sasm("strcmp")
 			self.sasm(f"cg {args[2]}")
+		elif cmd == "randint":
+			self.sasm(f"push {args[0]}")
+			self.sasm(f"push {args[1]}")
+			self.sasm("randint")
+			self.sasm(f"${args[2]}")
 
 
 		else:
@@ -256,8 +265,14 @@ class Compiler:
 					self.throw(f"Incorrect type '{args[1]}' for operation in 'is' function")
 		elif cmd == "callif":
 			self.min_args(3, ["value1", "value2", "task"])
+		elif cmd == "randint":
+			if self.min_args(3, ["min", "max", "store_location"]):
+				if not self.is_number(args[0]) and not args[0].startswith("$"):
+					self.throw(f"Incorrect type '{args[0]}' for number 1 in 'eval' function")
+				if not self.is_number(args[1]) and not args[1].startswith("$"):
+					self.throw(f"Incorrect type '{args[1]}' for number 2 in 'eval' function")
 
-	def compile_code(self, file, sep="|"):
+	def compile_code(self, file, sep="|", name=None):
 		self.sep = sep
 		lines = []
 		if sep == "/n":
@@ -278,18 +293,22 @@ class Compiler:
 		if self.error_raised:
 			print("Cannot compile code due to errors")
 			return
+		if not "exit" in lines and not "@no_exit" in lines:
+			self.throw("No exit statement\n", include_line=False)
 		for i, line in enumerate(lines):
 			self.line = line
 			self.i = i
 			self.compile_line(line.strip())
-		if not "exit" in lines and not "@no_exit" in lines:
-			self.throw("No exit statement\n", include_line=False)
 		if self.error_raised:
 			print("Cannot compile code due to errors")
 		else:
-			print("\ncode: " + self.compiled_code + "\n\nsuccessfully compiled code \ncode is available in 'out' directory with filename")
-			generate_file.gen_file(file, self.compiled_code)
-			generate_file.log_file(file)
+			output_name = name if name else str(file)
+			if not generate_file.is_valid_filename(output_name):
+				print(f"Cannot compile because name '{output_name}' contains an illegal character or phrase'")
+			else:
+				print("\ncode: " + self.compiled_code + "\n\nsuccessfully compiled code \ncode is available in 'out' directory with filename")
+				generate_file.gen_file(output_name, self.compiled_code)
+				generate_file.log_file(output_name)
 
 
 if __name__ == "__main__":
