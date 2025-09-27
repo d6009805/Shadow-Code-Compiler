@@ -1,12 +1,61 @@
 # Shadow-Code-Compiler
-The Shadow Code language is used to compile to Scratch Assembly Language (SASM) in this Scratch Project:
-https://scratch.mit.edu/projects/1219146913/
 
-Documentation for ShadowCodeCompiler has not come yet.
+**Shadow Code Compiler (SCC)** is a compiler that translates programs written in the **Shadow Code language** into **Scratch Assembly Language (SASM)**.
+You can experiment with SASM in this Scratch project:
+👉 [Scratch Project Link](https://scratch.mit.edu/projects/1219146913/)
 
-# Compiling Scripts
-In order to compile a program, run "(path)/Shadow Code Compiler/ShadowCodeCompiler/scc <filename>".
+> ⚠️ Full documentation for Shadow Code Compiler is coming soon.
 
-Compilation results are available in "(path)/Shadow Code Compiler/out/<filename>.sasm" and are also displayed in the terminal.
+---
 
-Optionally, add scc.bat to your PATH in environmental variables to be able to use "scc <filename>"
+## 🚀 Getting Started
+
+### Compiling Scripts
+
+To compile a program, run:
+
+```bash
+(path)/Shadow Code Compiler/ShadowCodeCompiler/scc <filename>
+```
+
+You can optionally add two keyword arguments:
+
+* `name` – specify a custom output filename
+* `sep` – specify a separator string
+
+**Example:**
+
+```bash
+scc calculator.sc sep="/n"
+```
+
+---
+
+### 📂 Output
+
+* Compiled code is saved to:
+
+  ```
+  (path)/Shadow Code Compiler/out/<filename>.sasm
+  ```
+* The compiled result is also displayed directly in the terminal.
+
+---
+
+### ⚡ Optional Setup
+
+For convenience, add `scc.bat` to your **PATH** in environment variables.
+This allows you to simply run:
+
+```bash
+scc <filename>
+```
+
+from any directory.
+
+---
+
+## 📌 Notes
+
+* Shadow Code is still evolving, and features may change.
+* Documentation will be expanded in future updates.
